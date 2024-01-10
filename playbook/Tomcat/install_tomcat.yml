@@ -1,0 +1,69 @@
+---
+  - hosts: tomcat_servers
+    become: true
+
+    tasks:
+      - name: Make sure that we can connect to the machine
+        ping:
+
+      - name: add group "tomcat"
+        group:
+          name: tomcat
+
+      - name: add user "tomcat"
+        user:
+          name: tomcat
+          group: tomcat
+          createhome: yes
+        become: true
+
+      - name: Download Tomcat
+        ansible.builtin.get_url:
+          url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.84/bin/apache-tomcat-9.0.84.tar.gz
+          dest: /opt/
+
+      - name: Extract archive
+        ansible.builtin.unarchive:
+          src: /opt/apache-tomcat-9.0.84.tar.gz
+          dest: /opt/
+          remote_src: yes  # Uzak sunucudaki dosyanın varlığını kontrol et
+
+      - name: Change ownership
+        ansible.builtin.file:
+          path: /opt/apache-tomcat-9.0.84/
+          owner: tomcat
+          group: tomcat
+          state: directory
+          recurse: yes
+
+      - name: configure Tomcat user
+        ansible.builtin.copy:
+          src: tomcat-users.xml
+          dest: /opt/apache-tomcat-9.0.84/conf/
+
+      - name: Copy Hello.war to Tomcat webapps directory
+        ansible.builtin.copy:
+          src: /home/ansible/Project/Hello.war
+          dest: /opt/apache-tomcat-9.0.84/webapps/
+
+      - name: Create init directory
+        ansible.builtin.file:
+          path: /etc/systemd/system/
+          state: directory
+
+      - name: Install tomcat systemd service unit
+        ansible.builtin.copy:
+          src: tomcat.service
+          dest: /etc/systemd/system/
+        notify: Reload systemd
+
+    handlers:
+      - name: Reload systemd
+        ansible.builtin.systemd:
+          daemon_reload: yes
+
+      - name: Start Tomcat
+        ansible.builtin.service:
+          name: tomcat
+          state: started
+          enabled: yes

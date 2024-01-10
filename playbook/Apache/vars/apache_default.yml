@@ -1,0 +1,6 @@
+---
+apache_sv: httpd
+php_lib: php
+maria_db: mariadb_server
+ftp_sv: vsftpd
+   

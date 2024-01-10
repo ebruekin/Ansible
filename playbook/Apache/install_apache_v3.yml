@@ -1,0 +1,14 @@
+---
+  - hosts: web_servers
+    become: true
+
+    tasks:
+      - name: downloading apache and php lib and checking package index
+        ansible.builtin.package:
+          name: 
+            - "{{ apache_sv }}"
+            - "{{ php_lib }}"
+          state: latest
+          update_cache: yes
+      
+

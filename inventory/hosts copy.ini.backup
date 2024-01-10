@@ -1,0 +1,12 @@
+#hosts
+[web_servers]
+192.168.1.12 ansible_user=host2 apache_sv=httpd php_lib=php
+#192.168.1.13 ansible_user=host2
+#192.168.1.14 ansible_user=host2
+
+[tomcat_servers]
+192.168.1.12 ansible_user=host2
+192.168.1.14 ansible_user=host2
+
+#192.168.31.129
+#10.0.2.15

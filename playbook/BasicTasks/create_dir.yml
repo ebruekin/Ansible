@@ -1,0 +1,21 @@
+---  
+  - hosts: for_basic_tasks
+    become: yes  
+
+    tasks:
+      - name: Creating new directory
+        
+        command: mkdir /tmp/newD  # Yeni bir directory oluştur
+        args:
+          chdir: /tmp  # directory oluşturmadan önce /tmp dir'e git
+
+      - name: Check if the directory exists
+        # Directory var mı diye kontrol et
+        stat:
+          path: /tmp/newD
+        register: dir_status
+
+      - name: Print the directory status
+       
+        debug:
+          var: dir_status.stat.exists

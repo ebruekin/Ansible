@@ -1,0 +1,29 @@
+---
+  - hosts: web_servers
+    become: true
+
+    tasks:
+      - name: keep the system up to date (apache)
+        ansible.builtin.package:
+          update_only: yes
+          update_cache: yes
+
+      - name: Detect OS
+        debug:
+          var: ansible_os_family
+        
+
+
+
+      - name: Include Apache and PHP variables
+        include_vars:
+          file: vars/apache_RedHat.yml
+
+      - name: Downloading Apache and PHP lib and checking package index
+        ansible.builtin.package:
+          name:
+            - "{{ apache_sv }}"
+            - "{{ php_lib }}"
+          state: latest
+
+

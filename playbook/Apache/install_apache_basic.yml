@@ -1,0 +1,36 @@
+---
+  - hosts: web_servers
+    become: true
+
+    tasks:
+
+    - name: check package index
+      yum:
+        update_cache: yes
+        
+
+    - name: installing apache
+      yum:        
+        name: httpd
+        state: latest
+
+    - name: Check Apache status
+      command: systemctl is-enabled httpd
+      register: apache_status
+
+    - name: Enable Apache if disabled
+      command: systemctl enable httpd
+      when: "'disabled' in apache_status.stdout"
+
+    - name: Restart Apache
+      service:
+        name: httpd
+        state: restarted
+      when: "'disabled' in apache_status.stdout"
+
+    - name: install php for apache
+      yum:
+        name: php
+        state: latest
+
+   

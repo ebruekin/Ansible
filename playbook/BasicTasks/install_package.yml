@@ -1,0 +1,17 @@
+#Write a playbook that will: a. Install the package zlib b. Create the file /tmp/some_file
+---
+
+
+  - hosts: for_basic_tasks
+    become: true
+
+    tasks:
+      - name: Install ant package
+        yum:
+          name: ant
+          state: latest
+
+      - name: Create file
+        command: touch /tmp/somefile
+        args:
+          chdir: /tmp

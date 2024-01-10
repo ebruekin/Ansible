@@ -1,0 +1,15 @@
+- hosts: check_sv
+  become: true
+  become_user: root
+  become_method: su
+
+  tasks:
+    - name: Run checkall command using alias
+      command: bash -i -c 'checkall'
+      register: checkall_output
+
+    - name: Print formatted checkall output
+      debug:
+        msg: |
+          "{{ inventory_hostname }} - Checkall Output:
+          {{ checkall_output.stdout_lines | join('\n') }}"

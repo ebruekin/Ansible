@@ -1,0 +1,88 @@
+---
+  - hosts: web_servers
+    become: true
+
+    tasks:
+      - name: keep the system up to date (apache)
+        ansible.builtin.package:
+          update_only: yes
+          update_cache: yes
+
+      - name: Detect OS
+        debug:
+          var: ansible_os_family
+        
+
+      - name: Include Apache and PHP variables
+        include_vars:
+          file: ../Apache/vars/apache_RedHat.yml
+
+      - name: Downloading Apache and PHP lib and checking package index
+        ansible.builtin.package:
+          name:
+            - "{{ apache_sv }}"
+            - "{{ php_lib }}"
+          state: latest
+
+      - name: Copy html to remote
+        copy:
+          src: /home/ansible/dev-project/Hello.html
+          dest: /var/www/html/index.html
+          owner: root
+          group: root
+          mode: 0644
+
+
+
+
+
+
+  - hosts: maria_db
+    become: true
+
+    tasks:
+      - name: Detect OS
+        debug:
+          var: ansible_os_family
+        
+
+      - name: Include db variables
+        include_vars:
+          file: /home/ansible/AnsibleAutomation/playbook/Apache/vars/apache_RedHat.yml
+         
+
+      - name: Downloading mariadb
+        ansible.builtin.package:
+          name:
+            - "{{ maria_db }}"
+            
+          state: latest
+
+
+
+
+
+  - hosts: ftp_sv
+    become: true
+
+    tasks:
+      - name: Detect OS
+        debug:
+          var: ansible_os_family
+        
+
+      - name: Include ftp variables
+        include_vars:
+          file: /home/ansible/AnsibleAutomation/playbook/Apache/vars/apache_RedHat.yml
+         
+
+      - name: Downloading ftp
+        ansible.builtin.package:
+          name:
+            - "{{ ftp_sv }}"
+            
+          state: latest
+
+
+
+
