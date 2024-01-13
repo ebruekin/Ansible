@@ -26,7 +26,7 @@
 
       - name: Copy html to remote
         copy:
-          src: /home/ansible/dev-project/Hello.html
+          src: /opt/ansible-env/HtmlProject/webApp.html
           dest: /var/www/html/index.html
           owner: root
           group: root
@@ -48,7 +48,7 @@
 
       - name: Include db variables
         include_vars:
-          file: /home/ansible/AnsibleAutomation/playbook/Apache/vars/apache_RedHat.yml
+          file: /opt/ansible-env/Ansible/playbook/Apache/vars/apache_RedHat.yml
          
 
       - name: Downloading mariadb
@@ -73,7 +73,7 @@
 
       - name: Include ftp variables
         include_vars:
-          file: /home/ansible/AnsibleAutomation/playbook/Apache/vars/apache_RedHat.yml
+          file: /opt/ansible-env/Ansible/playbook/Apache/vars/apache_RedHat.yml
          
 
       - name: Downloading ftp
