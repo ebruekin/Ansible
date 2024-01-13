@@ -1,6 +1,6 @@
 ---
   - hosts: web_servers
-    become: true
+    #become: true
 
     tasks:
       - name: keep the system up to date (apache)
@@ -38,7 +38,7 @@
 
 
   - hosts: maria_db
-    become: true
+    #become: true
 
     tasks:
       - name: Detect OS
@@ -63,7 +63,7 @@
 
 
   - hosts: ftp_sv
-    become: true
+    #become: true
 
     tasks:
       - name: Detect OS
